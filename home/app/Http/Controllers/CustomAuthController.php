@@ -48,7 +48,7 @@ class CustomAuthController extends Controller
         $user = User::where('email', '=', $request->email)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $request->session()->put('loginID', $user->id);
+                $request->session()->put('loginID', $user->user_id);
                 return redirect('dashboard');
             } else {
                 return back()->with('fail', 'Wrong password');
@@ -70,9 +70,8 @@ class CustomAuthController extends Controller
 
     public function logout()
     {
-        if (Session::has('loginID')) {
-
-            Session::pull('loginID');
+        if (session()->has('loginID')) {
+           session()->forget('loginID');
             return redirect('/login');
         }
     }
